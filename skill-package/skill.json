@@ -1,0 +1,134 @@
+{
+  "manifest": {
+    "publishingInformation": {
+      "locales": {
+        "en-US": {
+          "summary": "A hilarious list of truth or dare challenges",
+          "examplePhrases": [
+            "Alexa, ask Truth or Dare for a truth",
+            "Alexa, ask Truth or Dare for a dare"
+          ],
+          "keywords": [
+            "game",
+            "truth",
+            "dare",
+            "party",
+            "challenge"
+          ],
+          "name": "Truth or Dare",
+          "description": "A hilarious list of truth or dare challenges. Content is frequently updated, so tune back in. \n\nTo play, sit in a circle and decide on a starting player. That player must ask Alexa for a truth, or a dare. If they don't do what was assigned to them... They're out! Last person still in the circle wins.\n\n*** New truths and dares just added",
+          "smallIconUri": "file://assets/images/en-US_smallIconUri.png",
+          "largeIconUri": "file://assets/images/en-US_largeIconUri.png"
+        },
+        "en-CA": {
+          "summary": "A hilarious list of truth or dare challenges",
+          "examplePhrases": [
+            "Alexa, ask Truth or Dare for a truth",
+            "Alexa, ask Truth or Dare for a dare"
+          ],
+          "keywords": [
+            "game",
+            "truth",
+            "dare",
+            "party",
+            "challenge"
+          ],
+          "name": "Truth or Dare",
+          "description": "A hilarious list of truth or dare challenges. Content is frequently updated, so tune back in. \n\nTo play, sit in a circle and decide on a starting player. That player must ask Alexa for a truth, or a dare. If they don't do what was assigned to them... They're out! Last person still in the circle wins.\n\n*** New truths and dares just added",
+          "smallIconUri": "file://assets/images/en-CA_smallIconUri.png",
+          "largeIconUri": "file://assets/images/en-CA_largeIconUri.png"
+        },
+        "en-IN": {
+          "summary": "A hilarious list of truth or dare challenges",
+          "examplePhrases": [
+            "Alexa, open Truth or Dare",
+            "Alexa, ask Truth or Dare for a dare",
+            "Alexa, ask Truth or Dare for a truth"
+          ],
+          "keywords": [
+            "game",
+            "truth",
+            "dare",
+            "party",
+            "challenge"
+          ],
+          "name": "Truth or Dare",
+          "description": "A hilarious list of truth or dare challenges. Content is frequently updated, so tune back in. \n\nTo play, sit in a circle and decide on a starting player. That player must ask Alexa for a truth, or a dare. If they don't do what was assigned to them... They're out! Last person still in the circle wins.",
+          "smallIconUri": "file://assets/images/en-IN_smallIconUri.png",
+          "largeIconUri": "file://assets/images/en-IN_largeIconUri.png"
+        },
+        "en-AU": {
+          "summary": "A hilarious list of truth or dare challenges",
+          "examplePhrases": [
+            "Alexa, ask Truth or Dare for a truth",
+            "Alexa, ask Truth or Dare for a dare",
+            ""
+          ],
+          "keywords": [
+            "game",
+            "truth",
+            "dare",
+            "party",
+            "challenge"
+          ],
+          "name": "Truth or Dare",
+          "description": "A hilarious list of truth or dare challenges. Content is frequently updated, so tune back in. \n\nTo play, sit in a circle and decide on a starting player. That player must ask Alexa for a truth, or a dare. If they don't do what was assigned to them... They're out! Last person still in the circle wins.\n\n*** New truths and dares just added",
+          "smallIconUri": "file://assets/images/en-AU_smallIconUri.png",
+          "largeIconUri": "file://assets/images/en-AU_largeIconUri.png"
+        },
+        "en-GB": {
+          "summary": "A hilarious list of truth or dare challenges",
+          "examplePhrases": [
+            "Alexa, ask Truth or Dare for a truth",
+            "Alexa, ask Truth or Dare for a dare"
+          ],
+          "keywords": [
+            "game",
+            "truth",
+            "dare",
+            "party",
+            "challenge"
+          ],
+          "name": "Truth or Dare",
+          "description": "A hilarious list of truth or dare challenges. Content is frequently updated, so tune back in. \n\nTo play, sit in a circle and decide on a starting player. That player must ask Alexa for a truth, or a dare. If they don't do what was assigned to them... They're out! Last person still in the circle wins.\n\n*** New truths and dares just added",
+          "smallIconUri": "file://assets/images/en-GB_smallIconUri.png",
+          "largeIconUri": "file://assets/images/en-GB_largeIconUri.png"
+        }
+      },
+      "automaticDistribution": {
+        "isActive": false
+      },
+      "isAvailableWorldwide": true,
+      "testingInstructions": "{\"ask_dist_username\":\"\",\"ask_dist_password\":\"\",\"ask_dist_testing_instructions\":\"Ask for a truth or a dare. All content is PG. You'll get an offer to subscribe about 30% of the time unless you've already subscribed, the user is less than 12 hours old, or it's been 5 minutes since the last offer.\\n\\nAds are presented in the en-US locale unless the user is less than 12 hours old or is subscribed.\"}",
+      "category": "PARTY_GAMES",
+      "distributionCountries": []
+    },
+    "apis": {
+      "custom": {
+        "endpoint": {
+          "uri": "arn:aws:lambda:us-east-1:275844919584:function:ask-truthordare-default-default-1702149999359"
+        },
+        "interfaces": [],
+        "locales": {}
+      }
+    },
+    "manifestVersion": "1.0",
+    "privacyAndCompliance": {
+      "allowsPurchases": true,
+      "locales": {
+        "en-US": {},
+        "en-CA": {},
+        "en-IN": {},
+        "en-GB": {}
+      },
+      "containsAds": true,
+      "isExportCompliant": true,
+      "isChildDirected": false,
+      "shoppingKit": {
+        "isShoppingActionsEnabled": false,
+        "isAmazonAssociatesOnAlexaEnabled": false
+      },
+      "usesPersonalInfo": false
+    }
+  }
+}
