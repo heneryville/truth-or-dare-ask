@@ -14,7 +14,14 @@
         "userConfig": {
           "runtime": "nodejs16.x",
           "handler": "index.handler",
-          "awsRegion": "us-east-1"
+          "awsRegion": "us-east-1",
+          "lambda": {
+            "environmentVariables": {
+              "NODE_ENV": "production"
+            },
+            "lambda.memorySize": 1024,
+            "lambda.timeout": 30
+          }
         },
         "type": "@ask-cli/lambda-deployer"
       }

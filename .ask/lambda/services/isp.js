@@ -118,6 +118,9 @@ exports.InSkillPurchase = class InSkillPurchase {
   getProductList() {
     const { apiEndpoint, apiAccessToken } = this.rawEvent.context.System;
 
+    console.log('endpoint', apiEndpoint)
+    console.log('raw', this.rawEvent)
+
     const options = {
       headers: {
         "Accept-Language": isLocalizedRequest(this.rawEvent.request) ? this.rawEvent.request.locale : "en-us",

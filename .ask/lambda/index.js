@@ -11,11 +11,20 @@ const LaunchRequestHandler = {
                 && Alexa.getIntentName(handlerInput.requestEnvelope) === 'LaunchIntent');
     },
     async handle(hand) {
+
+        return hand.responseBuilder
+            .speak("Welcome to Truth or Dare. Do you want a truth, or a dare?")
+            .reprompt("What are you in the mood for? A truth or a dare?")
+            .addDirective({ "type": "Alexa.Advertisement.InjectAds"})
+            .withShouldEndSession(false)
+            .getResponse();
+
+
         if (await hand.model.shouldOfferSub()) {
             return hand.responseBuilder
                 .speak("Welcome to Truth or Dare. Do you want a truth, or a dare?")
                 .reprompt("What are you in the mood for? A truth or a dare?")
-                .addDirective(model.isp.upsellByRefrenceName('full_library',
+                .addDirective(hand.model.isp.upsellByRefrenceName('full_library',
                     'Would you like to get access to 200 more truths and dares and remove ads?',
                     'sub-upsell'
                 ))
@@ -24,12 +33,6 @@ const LaunchRequestHandler = {
         }
         // MKHTODO conditionalize ad offer
 
-        return hand.responseBuilder
-            .speak("Welcome to Truth or Dare. Do you want a truth, or a dare?")
-            .reprompt("What are you in the mood for? A truth or a dare?")
-            //.addDirective({ "type": "Alexa.Advertisement.InjectAds"})
-            //.withShouldEndSession(false)
-            .getResponse();
     }
 };
 
@@ -214,7 +217,7 @@ const ErrorHandler = {
     },
     handle(handlerInput, error) {
         console.log(`~~~~ Error handled: ${error.stack}`);
-        const speakOutput = `Sorry, I had trouble doing what you asked. Please try again.`;
+        const speakOutput = `Sorry, I had trouble doing what you asked. Please say it again.`;
 
         return handlerInput.responseBuilder
             .speak(speakOutput)
