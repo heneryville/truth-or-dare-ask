@@ -2,6 +2,7 @@
 // Please visit https://alexa.design/cookbook for additional examples on implementing slots, dialog management,
 // session persistence, api calls, and more.
 const Alexa = require('ask-sdk-core');
+const TruthOrDare = require('./services/TruthOrDare');
 
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
@@ -9,11 +10,25 @@ const LaunchRequestHandler = {
             || (Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
                 && Alexa.getIntentName(handlerInput.requestEnvelope) === 'LaunchIntent');
     },
-    handle(handlerInput) {
-        return handlerInput.responseBuilder
-            .speak("Welcome to Truth or Dare.")
-            .addDirective({ "type": "Alexa.Advertisement.InjectAds"})
-            .withShouldEndSession(false)
+    async handle(hand) {
+        if (await hand.model.shouldOfferSub()) {
+            return hand.responseBuilder
+                .speak("Welcome to Truth or Dare. Do you want a truth, or a dare?")
+                .reprompt("What are you in the mood for? A truth or a dare?")
+                .addDirective(model.isp.upsellByRefrenceName('full_library',
+                    'Would you like to get access to 200 more truths and dares and remove ads?',
+                    'sub-upsell'
+                ))
+                .getResponse();
+
+        }
+        // MKHTODO conditionalize ad offer
+
+        return hand.responseBuilder
+            .speak("Welcome to Truth or Dare. Do you want a truth, or a dare?")
+            .reprompt("What are you in the mood for? A truth or a dare?")
+            //.addDirective({ "type": "Alexa.Advertisement.InjectAds"})
+            //.withShouldEndSession(false)
             .getResponse();
     }
 };
@@ -26,7 +41,7 @@ const AdCompletedHandler = {
     async handle(handlerInput) {
         return handlerInput.responseBuilder
             .speak('Do you want a truth, or a dare?')
-            .repompt('Will that be a truth, or a dare?')
+            .reprompt('Will that be a truth, or a dare?')
             .getResponse();
     }
 };
@@ -39,8 +54,63 @@ const AdNotRenderedHandler = {
     async handle(handlerInput) {
         return handlerInput.responseBuilder
             .speak('Do you want a truth, or a dare?')
-            .repompt('Will that be a truth, or a dare?')
+            .reprompt('Will that be a truth, or a dare?')
             .getResponse();
+    }
+};
+
+const ConnectionsResponseHandler = {
+    canHandle(handlerInput) {
+        return handlerInput.requestEnvelope.request
+            .type.startsWith('Connections.Response');
+    },
+    handle(hand) {
+        const req = hand.requestEnvelope.request;
+        if (req.name == 'Cancel') {
+            return hand.responseBuilder
+                .speak('Do you want a truth, or a dare?')
+                .reprompt('Will that be a truth, or a dare?')
+                .getResponse();
+        }
+        const didAccept = resp.payload.purchaseResult == 'ACCEPTED';
+        if (didAccept) {
+            return hand.responseBuilder
+                .speak('Lets move on. Do you want a truth, or a dare?')
+                .reprompt('Will that be a truth, or a dare?')
+                .getResponse();
+
+        } else {
+            return hand.responseBuilder
+                .speak('Lets move on then. Do you want a truth, or a dare?')
+                .reprompt('Will that be a truth, or a dare?')
+                .getResponse();
+        }
+    }
+};
+
+const SubscribeIntentHandler = {
+    canHandle(handlerInput) {
+        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'SubscribeIntent';
+    },
+    async handle(hand) {
+        return hand.responseBuilder
+            .addDirective(await hand.model.isp.upsellByRefrenceName('full_library', 'sub-buy'))
+            .getResponse()
+    }
+};
+
+const RefundIntentHandler = {
+    canHandle(handlerInput) {
+        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'RefundIntent';
+    },
+    async handle(hand) {
+        const dir = await hand.model.isp.cancelByReferenceName('full_library', 'sub-cancel');
+        console.log("refund directive", dir)
+        return hand.responseBuilder
+            .addDirective(dir)
+            .getResponse()
     }
 };
 
@@ -50,9 +120,8 @@ const TruthIntentHandler = {
             && Alexa.getIntentName(handlerInput.requestEnvelope) === 'TruthIntent';
     },
     async handle(handlerInput) {
-        //const truth = handler.model.pickTruth();
-        const truth = 'What color is the moon?'
-        const speakOutput = `A truth. ${truth}`;
+        await handlerInput.model.pickTruth();
+        const speakOutput = `A truth. ${handlerInput.model.truth}`;
         return handlerInput.responseBuilder
             .speak(speakOutput)
             .getResponse()
@@ -65,8 +134,8 @@ const DareIntentHandler = {
             && Alexa.getIntentName(handlerInput.requestEnvelope) === 'DareIntent';
     },
     async handle(handlerInput) {
-        const dare = 'Crawl under the table and act like there is an earthquake.'
-        const speakOutput = `Your dare is to ${dare}`;
+        await handlerInput.model.pickDare();
+        const speakOutput = `Your dare is to ${handlerInput.model.dare}`;
         return handlerInput.responseBuilder
             .speak(speakOutput)
             .getResponse()
@@ -154,10 +223,34 @@ const ErrorHandler = {
     }
 };
 
+;
+
+const InjectModelInterceptor = {
+    async process(handlerInput) {
+        const model = await TruthOrDare.deserialize(
+            handlerInput.attributesManager.getSessionAttributes(),
+            //handlerInput?.requestEnvelope?.session?.attributes,
+            handlerInput?.requestEnvelope
+        );
+        handlerInput.model = model;
+    }
+};
+
+const PersistModelInterceptor = {
+    async process(handlerInput, response) {
+        if (handlerInput.model) {
+            handlerInput.attributesManager.setSessionAttributes(await handlerInput.model.serialize())
+            delete handlerInput.model 
+        }
+    }
+}
+
+
 // The SkillBuilder acts as the entry point for your skill, routing all request and response
 // payloads to the handlers above. Make sure any new handlers or interceptors you've
 // defined are included below. The order matters - they're processed top to bottom.
 exports.handler = Alexa.SkillBuilders.custom()
+    .addRequestInterceptors(InjectModelInterceptor)
     .addRequestHandlers(
         LaunchRequestHandler,
         AdCompletedHandler,
@@ -165,15 +258,22 @@ exports.handler = Alexa.SkillBuilders.custom()
         TruthIntentHandler,
         DareIntentHandler,
         CancelAndStopIntentHandler,
+        HelpIntentHandler,
+        ConnectionsResponseHandler,
+        SubscribeIntentHandler,
+        RefundIntentHandler,
         FallbackIntentHandler,
         SessionEndedRequestHandler,
     )
-    .addResponseInterceptors(function(requestEnvelope, response){
-		console.log("\n" + "******************* REQUEST ENVELOPE **********************");
-		console.log("\n" + JSON.stringify(requestEnvelope, null, 4));
-		console.log("\n" + "******************* RESPONSE  **********************");
-		console.log("\n" + JSON.stringify(response, null, 4));
-	})
+    .addResponseInterceptors(PersistModelInterceptor)
+    .addResponseInterceptors(function (requestEnvelope, response) {
+        console.log("\n" + "******************* REQUEST ENVELOPE **********************");
+        console.log("\n" + JSON.stringify(requestEnvelope, null, 4));
+        console.log("\n" + "******************* RESPONSE  **********************");
+        console.log("\n" + JSON.stringify(response, null, 4));
+    })
+    .addResponseInterceptors(function (requestEnvelope, response) {
+    })
     .addErrorHandlers(
         ErrorHandler,
     )

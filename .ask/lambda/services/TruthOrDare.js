@@ -3,38 +3,46 @@ const moment = require('moment');
 const library  = require('./library');
 const config  = require('../config');
 const {User, Attempt, Answer, seq, sequelize} = require('../db-models')
+const {InSkillPurchase} = require("./isp");
 
 
 class TruthOrDare {
 
-  constructor(data) {
+  constructor(data, isp) {
     Object.assign(this,data);
+    this.isp = isp
   }
 
   async serialize() {
     let self = this;
     await this.user.save();
-    return Object.assign(_.omit(self,['user']),{});
+    return Object.assign(_.omit(self,['user','isp']),{});
   }
 
   static async deserialize(bag, event) {
     const data = _.cloneDeep(bag || {});
-    const user = await  User.get(event.user.userId)
-    data.user = user;
-    let model = new TruthOrDare(data);
+    const userId = event?.session?.user?.userId
+    if(userId) {
+      const user = await  User.get(userId)
+      data.user = user;
+    }
+    const isp = new InSkillPurchase(event);
+    let model = new TruthOrDare(data, isp);
     return model;
   }
 
-  async shouldOfferSub(event) {
-    if(_.random() > 0.3) return false;
-    const hoursSinceUserCreated = moment().diff(moment(this.user.createdAt), 'hours');
-    if(hoursSinceUserCreated < 12) return false;
+  async shouldOfferSub() {
+    // MKHTODO uncomment
+    // if(_.random() > 0.3) return false;
+    // const hoursSinceUserCreated = moment().diff(moment(this.user.createdAt), 'hours');
+    // if(hoursSinceUserCreated < 12) return false;
 
-    if(this.user.lastSubOffer) {
-      const minutesSinceLastSubOffer = moment().diff(moment(this.user.lastSubOffer), 'minutes');
-      if(minutesSinceLastSubOffer< 5) return false;
-    }
-    const isEntitled = await this.isSubscribed(event, true)
+    // if(this.user.lastSubOffer) {
+    //   const minutesSinceLastSubOffer = moment().diff(moment(this.user.lastSubOffer), 'minutes');
+    //   if(minutesSinceLastSubOffer< 5) return false;
+    // }
+    const isEntitled = await this.isSubscribed(true)
+    console.log("isEntitled?", isEntitled)
     if(isEntitled) return false
     this.user.lastSubOffer = new Date();
     return true;
@@ -42,27 +50,27 @@ class TruthOrDare {
 
   async shouldShowAds(event) {
     if(event.request.locale != 'en-US') return false;
-    if(!event.rawEvent.context.Advertising) return false;
+    if(!event.context.Advertising) return false;
     const hoursSinceUserCreated = moment().diff(moment(this.user.createdAt), 'hours');
     if(hoursSinceUserCreated < 12) return false;
 
-    const isEntitled = await this.isSubscribed(event, true);
+    const isEntitled = await this.isSubscribed(true);
      return !isEntitled
   }
 
-  async isSubscribed(event, defaultOnNoProduct) {
-    const product = await event.alexa.isp.getProductByReferenceName('full_library')
+  async isSubscribed(defaultOnNoProduct) {
+    const product = await this.isp.getProductByReferenceName('full_library')
     if(!product) return defaultOnNoProduct; // Where there is no subscription, we'll give the chance to not have ads
     const isEntitled = _.get(product, 'entitled') == 'ENTITLED'
     return isEntitled
   }
 
-  async pickTruth(event) {
-    this.truth = library.pickTruth(await this.isSubscribed(event, false));
+  async pickTruth() {
+    this.truth = library.pickTruth(await this.isSubscribed(false));
   }
 
-  async pickDare(event) {
-    this.dare = library.pickDare(await this.isSubscribed(event, false));
+  async pickDare() {
+    this.dare = library.pickDare(await this.isSubscribed(false));
   }
 
 }

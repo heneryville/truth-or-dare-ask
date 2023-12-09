@@ -1,0 +1,26 @@
+{
+  "development": {
+    "username": "root",
+    "password": "root",
+    "database": "truth_or_dare",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "operatorAliases": false
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "truth_or_dare",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "operatorAliases": false
+  },
+  "production": {
+    "username": "root",
+    "password": "9b#p1UsKA3wkpM*O#P",
+    "database": "truth_or_dare",
+    "host": "alexa-skills-prod.ckeigcnxn9i2.us-east-1.rds.amazonaws.com",
+    "dialect": "mysql",
+    "operatorAliases": false
+  }
+}
