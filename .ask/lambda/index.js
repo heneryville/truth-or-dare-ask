@@ -11,54 +11,23 @@ const LaunchRequestHandler = {
                 && Alexa.getIntentName(handlerInput.requestEnvelope) === 'LaunchIntent');
     },
     async handle(hand) {
-
-        return hand.responseBuilder
-            .speak("Welcome to Truth or Dare. Do you want a truth, or a dare?")
-            .reprompt("What are you in the mood for? A truth or a dare?")
-            .addDirective({ "type": "Alexa.Advertisement.InjectAds"})
-            .withShouldEndSession(false)
-            .getResponse();
-
-
         if (await hand.model.shouldOfferSub()) {
             return hand.responseBuilder
                 .speak("Welcome to Truth or Dare. Do you want a truth, or a dare?")
                 .reprompt("What are you in the mood for? A truth or a dare?")
                 .addDirective(hand.model.isp.upsellByRefrenceName('full_library',
-                    'Would you like to get access to 200 more truths and dares and remove ads?',
+                    'Would you like to get access to 200 more truths?',
                     'sub-upsell'
                 ))
                 .getResponse();
 
         }
-        // MKHTODO conditionalize ad offer
-
-    }
-};
-
-const AdCompletedHandler = {
-    canHandle(handlerInput) {
-        return handlerInput.requestEnvelope.request
-            .type.startsWith('Alexa.Advertisement.AdCompletedHandler');
-    },
-    async handle(handlerInput) {
-        return handlerInput.responseBuilder
-            .speak('Do you want a truth, or a dare?')
-            .reprompt('Will that be a truth, or a dare?')
+        return hand.responseBuilder
+            .speak("Welcome to Truth or Dare. Do you want a truth, or a dare?")
+            .reprompt("What are you in the mood for? A truth or a dare?")
+            .withShouldEndSession(false)
             .getResponse();
-    }
-};
 
-const AdNotRenderedHandler = {
-    canHandle(handlerInput) {
-        return handlerInput.requestEnvelope.request
-            .type.startsWith('Alexa.Advertisement.AdNotRendered');
-    },
-    async handle(handlerInput) {
-        return handlerInput.responseBuilder
-            .speak('Do you want a truth, or a dare?')
-            .reprompt('Will that be a truth, or a dare?')
-            .getResponse();
     }
 };
 
@@ -256,8 +225,6 @@ exports.handler = Alexa.SkillBuilders.custom()
     .addRequestInterceptors(InjectModelInterceptor)
     .addRequestHandlers(
         LaunchRequestHandler,
-        AdCompletedHandler,
-        AdNotRenderedHandler,
         TruthIntentHandler,
         DareIntentHandler,
         CancelAndStopIntentHandler,

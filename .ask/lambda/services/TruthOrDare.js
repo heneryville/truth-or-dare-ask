@@ -32,30 +32,19 @@ class TruthOrDare {
   }
 
   async shouldOfferSub() {
-    // MKHTODO uncomment
-    // if(_.random() > 0.3) return false;
-    // const hoursSinceUserCreated = moment().diff(moment(this.user.createdAt), 'hours');
-    // if(hoursSinceUserCreated < 12) return false;
+     if(_.random() > 0.3) return false;
+     const hoursSinceUserCreated = moment().diff(moment(this.user.createdAt), 'hours');
+     if(hoursSinceUserCreated < 12) return false;
 
-    // if(this.user.lastSubOffer) {
-    //   const minutesSinceLastSubOffer = moment().diff(moment(this.user.lastSubOffer), 'minutes');
-    //   if(minutesSinceLastSubOffer< 5) return false;
-    // }
+     if(this.user.lastSubOffer) {
+       const minutesSinceLastSubOffer = moment().diff(moment(this.user.lastSubOffer), 'minutes');
+       if(minutesSinceLastSubOffer< 5) return false;
+     }
     const isEntitled = await this.isSubscribed(true)
     console.log("isEntitled?", isEntitled)
     if(isEntitled) return false
     this.user.lastSubOffer = new Date();
     return true;
-  }
-
-  async shouldShowAds(event) {
-    if(event.request.locale != 'en-US') return false;
-    if(!event.context.Advertising) return false;
-    const hoursSinceUserCreated = moment().diff(moment(this.user.createdAt), 'hours');
-    if(hoursSinceUserCreated < 12) return false;
-
-    const isEntitled = await this.isSubscribed(true);
-     return !isEntitled
   }
 
   async isSubscribed(defaultOnNoProduct) {

@@ -121,7 +121,7 @@
         "en-IN": {},
         "en-GB": {}
       },
-      "containsAds": true,
+      "containsAds": false,
       "isExportCompliant": true,
       "isChildDirected": false,
       "shoppingKit": {

@@ -9,8 +9,8 @@
             "default": {
               "lambda": {
                 "arn": "arn:aws:lambda:us-east-1:275844919584:function:ask-truthordare-default-default-1702149999359",
-                "lastModified": "2023-12-09T23:19:54.000+0000",
-                "revisionId": "8b733141-d2cf-49cb-9f09-b987644f7318"
+                "lastModified": "2024-02-22T00:40:40.000+0000",
+                "revisionId": "8e6ad2cb-8451-4744-af6d-111418a4a2a3"
               },
               "iamRole": "arn:aws:iam::275844919584:role/ask-lambda-TruthorDare-1702149998742"
             }
@@ -18,12 +18,12 @@
         }
       },
       "skillMetadata": {
-        "lastDeployHash": "UAqXwzO4KXwioT6DKj9ekCw4fE8=",
+        "lastDeployHash": "6GUoM4j5wfmOlFF5LPJgJ9jBYAQ=",
         "lastDeployType": "interaction-model"
       },
       "code": {
         "default": {
-          "lastDeployHash": "Dmct2nRARslyFcdYCiMJJ38YyGs="
+          "lastDeployHash": "5sAwzrmiFXaVZG93UqJR95nw3e4="
         }
       }
     }
