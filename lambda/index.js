@@ -15,7 +15,7 @@ const LaunchRequestHandler = {
             return hand.responseBuilder
                 .speak("Welcome to Truth or Dare. Do you want a truth, or a dare?")
                 .reprompt("What are you in the mood for? A truth or a dare?")
-                .addDirective(hand.model.isp.upsellByRefrenceName('full_library',
+                .addDirective(hand.model.isp.upsellByReferenceName('full_library',
                     'Would you like to get access to 200 more truths?',
                     'sub-upsell'
                 ))
@@ -44,7 +44,7 @@ const ConnectionsResponseHandler = {
                 .reprompt('Will that be a truth, or a dare?')
                 .getResponse();
         }
-        const didAccept = resp.payload.purchaseResult == 'ACCEPTED';
+        const didAccept = req.payload.purchaseResult == 'ACCEPTED';
         if (didAccept) {
             return hand.responseBuilder
                 .speak('Lets move on. Do you want a truth, or a dare?')
@@ -66,8 +66,9 @@ const SubscribeIntentHandler = {
             && Alexa.getIntentName(handlerInput.requestEnvelope) === 'SubscribeIntent';
     },
     async handle(hand) {
+        console.log()
         return hand.responseBuilder
-            .addDirective(await hand.model.isp.upsellByRefrenceName('full_library', 'sub-buy'))
+            .addDirective(await hand.model.isp.buyByReferenceName('full_library', 'Do you want to upgrade to the full library?'))
             .getResponse()
     }
 };
@@ -120,11 +121,11 @@ const HelpIntentHandler = {
             && Alexa.getIntentName(handlerInput.requestEnvelope) === 'AMAZON.HelpIntent';
     },
     handle(handlerInput) {
-        const speakOutput = 'Ask for a truth or a dare. Simply say, Alexa ask Truth or Dare for a truth. To play, gather a group of at least three friends and take turns answering either a truth or a dare.';
+        const speakOutput = 'Ask for a truth or a dare. Simply say, Alexa ask Truth or Dare for a truth. To play, gather a group of at least three friends and take turns answering either a truth or a dare. Do you want a truth, or a dare?';
 
         return handlerInput.responseBuilder
             .speak(speakOutput)
-            .reprompt(speakOutput)
+            .reprompt('Will that be a truth or a dare?')
             .getResponse();
     }
 };

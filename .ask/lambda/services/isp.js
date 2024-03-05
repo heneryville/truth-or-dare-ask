@@ -86,7 +86,7 @@ exports.InSkillPurchase = class InSkillPurchase {
     return _.get(ALLOWED_ISP_ENDPOINTS, locale) === endpoint;
   }
 
-  async buyByReferenceName( referenceName, token) {
+  async buyByReferenceName(referenceName, token) {
     const product = await this.getProductByReferenceName(referenceName);
     return InSkillPurchase.buy(_.get(product, "productId"), token);
   }
