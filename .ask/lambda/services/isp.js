@@ -52,13 +52,14 @@ exports.InSkillPurchase = class InSkillPurchase {
     upsellMessage,
   ) {
     const payload = this.formatPayload(productId, upsellMessage);
-
-    return {
+    const ret = {
         name: method,
         payload,
         token: token || "token",
         type: "Connections.SendRequest"
     }
+    //console.log('sendConnectionSendRequest', ret)
+    return ret;
   }
 
   static formatPayload( productId, upsellMessage)
@@ -102,7 +103,7 @@ exports.InSkillPurchase = class InSkillPurchase {
     token,
   ) {
     const product = await this.getProductByReferenceName(referenceName);
-    console.log("upsellByReferenceName", product)
+    //console.log("upsellByReferenceName", product)
     return InSkillPurchase.upsell(
       _.get(product, "productId"),
       upsellMessage,
@@ -118,8 +119,8 @@ exports.InSkillPurchase = class InSkillPurchase {
   getProductList() {
     const { apiEndpoint, apiAccessToken } = this.rawEvent.context.System;
 
-    console.log('endpoint', apiEndpoint)
-    console.log('raw', this.rawEvent)
+    //console.log('endpoint', apiEndpoint)
+    //console.log('raw', this.rawEvent)
 
     const options = {
       headers: {

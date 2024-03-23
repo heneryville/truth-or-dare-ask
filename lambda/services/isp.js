@@ -81,7 +81,7 @@ exports.InSkillPurchase = class InSkillPurchase {
       "en-US": "https://api.amazonalexa.com",
     };
 
-    const locale = isLocalizedRequest(this.rawEvent.request) ? this.rawEvent.request.locale : "en-us";
+    const locale = this.rawEvent.request.locale;
     const endpoint = _.get(this.rawEvent, "context.System.apiEndpoint");
 
     return _.get(ALLOWED_ISP_ENDPOINTS, locale) === endpoint;

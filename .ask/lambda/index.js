@@ -13,10 +13,8 @@ const LaunchRequestHandler = {
     async handle(hand) {
         if (await hand.model.shouldOfferSub()) {
             return hand.responseBuilder
-                .speak("Welcome to Truth or Dare. Do you want a truth, or a dare?")
-                .reprompt("What are you in the mood for? A truth or a dare?")
-                .addDirective(hand.model.isp.upsellByReferenceName('full_library',
-                    'Would you like to get access to 200 more truths?',
+                .addDirective(await hand.model.isp.upsellByReferenceName('full_library',
+                    'Welcome to Truth or Dare. Would you like to get access to 200 more truths or dares?',
                     'sub-upsell'
                 ))
                 .getResponse();

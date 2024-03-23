@@ -9,8 +9,8 @@
             "default": {
               "lambda": {
                 "arn": "arn:aws:lambda:us-east-1:275844919584:function:ask-truthordare-default-default-1702149999359",
-                "lastModified": "2024-03-05T01:58:20.000+0000",
-                "revisionId": "e286afee-d20e-42ff-a1b1-6f07d0e2c6e3"
+                "lastModified": "2024-03-23T19:17:58.000+0000",
+                "revisionId": "a081f45b-b52b-4410-8e92-0e2cce6eebd6"
               },
               "iamRole": "arn:aws:iam::275844919584:role/ask-lambda-TruthorDare-1702149998742"
             }
@@ -23,7 +23,7 @@
       },
       "code": {
         "default": {
-          "lastDeployHash": "52erpnkPq1H/K2B63WQbuHWe5hk="
+          "lastDeployHash": "MecTDND9luVbG4i8ZegJNTQp6BQ="
         }
       }
     }
