@@ -32,18 +32,18 @@ class TruthOrDare {
   }
 
   async shouldOfferSub() {
-     if(_.random() > .8) {
+     if(_.random() > .3) {
       console.log("random chooses no sub offer")
       return false;
      }
      const hoursSinceUserCreated = moment().diff(moment(this.user.createdAt), 'hours');
      console.log("Hours since created:", hoursSinceUserCreated)
-     if(hoursSinceUserCreated < 0) return false;
+     if(hoursSinceUserCreated < 2) return false;
 
      if(this.user.lastSubOffer) {
       console.log("Last sub offer:", this.user.lastSubOffer, moment().diff(moment(this.user.lastSubOffer), 'minutes'))
        const minutesSinceLastSubOffer = moment().diff(moment(this.user.lastSubOffer), 'minutes');
-       if(minutesSinceLastSubOffer< 0) return false;
+       if(minutesSinceLastSubOffer < 10) return false;
      }
     if(!this.isp.isAllowed()) return false;
     const isEntitled = await this.isSubscribed(true)
